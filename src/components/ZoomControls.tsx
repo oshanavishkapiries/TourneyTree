@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React from "react";
 
 interface ZoomControlsProps {
   stageScale: number;
@@ -18,17 +18,20 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
 
   return (
     <div className="zoom-controls">
-      <button 
-        className="zoom-btn" 
+      <button
+        className="zoom-btn"
         onClick={onZoomIn}
         disabled={stageScale >= 5}
         aria-label="Zoom in"
       >
         +
       </button>
-      
-      <div 
-        className="zoom-indicator" 
+
+      <div
+        className="zoom-indicator"
+        style={{
+          fontFamily: "Arial, sans-serif",
+        }}
         onClick={onResetZoom}
         role="button"
         tabIndex={0}
@@ -36,9 +39,9 @@ export const ZoomControls: React.FC<ZoomControlsProps> = ({
       >
         {zoomPercentage}%
       </div>
-      
-      <button 
-        className="zoom-btn" 
+
+      <button
+        className="zoom-btn"
         onClick={onZoomOut}
         disabled={stageScale <= 0.1}
         aria-label="Zoom out"

@@ -77,21 +77,7 @@ const App = () => {
       >
         <Layer>
           {lines.map((pts, i) => (
-            <Line
-              key={i}
-              points={pts}
-              stroke={
-                highlightedPath?.lineIndices.includes(i)
-                  ? colors.primary
-                  : colors.border
-              }
-              strokeWidth={highlightedPath?.lineIndices.includes(i) ? 4 : 3}
-              opacity={
-                highlightedPath && !highlightedPath.lineIndices.includes(i)
-                  ? 0.3
-                  : 1
-              }
-            />
+            <Line key={i} points={pts} stroke={colors.border} strokeWidth={3} />
           ))}
 
           {tree.map((p, i) => (

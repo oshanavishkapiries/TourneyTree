@@ -60,8 +60,12 @@ export const KonvaCard: FC<KonvaCardProps> = ({
 
   // Dynamic properties based on hover state
   const cardStrokeWidth = isCardHovered || isHighlighted ? 3 : 3;
-  const cardStroke = isHighlighted ? colors.primary : (isCardHovered ? colors.primary : colors.border);
-  const cardShadowBlur = isHighlighted ? 10 : 0;
+  const cardStroke = isHighlighted
+    ? colors.primary
+    : isCardHovered
+    ? colors.primary
+    : colors.border;
+  const cardShadowBlur = isHighlighted ? 0 : 0;
   const buttonOpacity = isButtonHovered ? 0.9 : 1;
 
   const handleCardMouseEnter = () => {
@@ -70,7 +74,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
     if (container) {
       container.style.cursor = "pointer";
     }
-    
+
     // Call parent's onMouseEnter with cardIndex
     if (onMouseEnter && cardIndex !== undefined) {
       onMouseEnter(cardIndex);
@@ -83,7 +87,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
     if (container) {
       container.style.cursor = "default";
     }
-    
+
     // Call parent's onMouseLeave
     if (onMouseLeave) {
       onMouseLeave();

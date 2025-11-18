@@ -21,22 +21,20 @@ body {
 /* Zoom Controls */
 .zoom-controls {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 5px;
+  right: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
   border-radius: 8px;
   padding: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 100;
 }
 
 .zoom-btn {
-  width: 40px;
+  width: 60px;
   height: 40px;
   border: 1px solid hsl(var(--border));
   border-radius: 6px;
