@@ -1,0 +1,10 @@
+Now i want to create a npm package using this project 
+
+my target is abtract most of levels for the my package users 
+
+i want to do like developers can select element for stage mount then they can give data json like my json format
+the this diagram draws all handle in package it self 
+
+create npm package for this directory named "package"
+
+ask any question before we impliment 

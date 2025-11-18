@@ -1,0 +1,61 @@
+{
+  "name": "@oshan/tourneytree",
+  "version": "1.0.0",
+  "description": "A React/Next.js component for rendering elimination tournament trees with Konva",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "echo \"No tests specified\"",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "tournament",
+    "elimination",
+    "bracket",
+    "react",
+    "nextjs",
+    "konva",
+    "canvas",
+    "tournament-tree",
+    "bracket-visualization",
+    "sports-tournament"
+  ],
+  "author": "Oshan",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "konva": "^9.2.0",
+    "react-konva": "^18.2.10"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "rollup": "^4.6.1",
+    "typescript": "^5.2.2"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oshan/tourneytree.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oshan/tourneytree/issues"
+  },
+  "homepage": "https://github.com/oshan/tourneytree#readme"
+}
