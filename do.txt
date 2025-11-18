@@ -1,0 +1,4 @@
+now do this changes allways separate codes and simplify them.
+
+01. main-box bottom - right i want to zoom in and out and zoom count indicater then click it reset zoom 
+02. when tournament card hoverd i want to show all path highlight to end tree 

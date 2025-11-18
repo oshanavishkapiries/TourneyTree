@@ -1,3 +1,4 @@
+"use client";
 import type { FC } from "react";
 import { useState } from "react";
 import { Rect, Group, Text, Line } from "react-konva";
@@ -10,6 +11,10 @@ interface KonvaCardProps {
   seed: string;
   player1: string;
   player2: string;
+  cardIndex?: number;
+  isHighlighted?: boolean;
+  onMouseEnter?: (cardIndex: number) => void;
+  onMouseLeave?: () => void;
 }
 
 export const KonvaCard: FC<KonvaCardProps> = ({
@@ -19,6 +24,10 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   seed,
   player1,
   player2,
+  cardIndex = 0,
+  isHighlighted = false,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   // State for hover effects
   const [isCardHovered, setIsCardHovered] = useState(false);
@@ -50,7 +59,9 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   const buttonCornerRadius = buttonHeight / 5;
 
   // Dynamic properties based on hover state
-  const cardStrokeWidth = isCardHovered ? 3 : 3;
+  const cardStrokeWidth = isCardHovered || isHighlighted ? 3 : 3;
+  const cardStroke = isHighlighted ? colors.primary : (isCardHovered ? colors.primary : colors.border);
+  const cardShadowBlur = isHighlighted ? 10 : 0;
   const buttonOpacity = isButtonHovered ? 0.9 : 1;
 
   const handleCardMouseEnter = () => {
@@ -59,6 +70,11 @@ export const KonvaCard: FC<KonvaCardProps> = ({
     if (container) {
       container.style.cursor = "pointer";
     }
+    
+    // Call parent's onMouseEnter with cardIndex
+    if (onMouseEnter && cardIndex !== undefined) {
+      onMouseEnter(cardIndex);
+    }
   };
 
   const handleCardMouseLeave = () => {
@@ -66,6 +82,11 @@ export const KonvaCard: FC<KonvaCardProps> = ({
     const container = document.querySelector("canvas")?.parentElement;
     if (container) {
       container.style.cursor = "default";
+    }
+    
+    // Call parent's onMouseLeave
+    if (onMouseLeave) {
+      onMouseLeave();
     }
   };
 
@@ -90,9 +111,11 @@ export const KonvaCard: FC<KonvaCardProps> = ({
         width={cardWidth}
         height={cardHeight}
         fill={colors.card}
-        stroke={isCardHovered ? colors.primary : colors.border}
+        stroke={cardStroke}
         strokeWidth={cardStrokeWidth}
         cornerRadius={cornerRadius}
+        shadowBlur={cardShadowBlur}
+        shadowColor={isHighlighted ? colors.primary : "transparent"}
       />
 
       {/* Seed Text */}
