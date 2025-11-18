@@ -6,8 +6,6 @@ import type { KonvaColors } from "../hooks/useKonvaColors";
 interface KonvaCardProps {
   x: number;
   y: number;
-  cardWidth: number;
-  cardHeight: number;
   colors: KonvaColors;
   seed: string;
   player1: string;
@@ -52,7 +50,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   const buttonCornerRadius = buttonHeight / 5;
 
   // Dynamic properties based on hover state
-  const cardStrokeWidth = isCardHovered ? 3 : 1;
+  const cardStrokeWidth = isCardHovered ? 3 : 3;
   const buttonOpacity = isButtonHovered ? 0.9 : 1;
 
   const handleCardMouseEnter = () => {

@@ -1,4 +1,4 @@
-import { TournamentData } from './tournamentLayout';
+import type { TournamentData } from "./tournamentLayout";
 
 export const sampleTournamentData: TournamentData = {
   "Round-01": [
