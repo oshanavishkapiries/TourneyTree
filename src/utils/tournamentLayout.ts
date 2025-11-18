@@ -20,10 +20,19 @@ export interface LayoutConfig {
   cardWidth: number;
   cardHeight: number;
   roundSpacing: number;
-  cardSpacing: number;
+  matchSpacing: number;
   startX: number;
   startY: number;
 }
+
+export const defaultLayoutConfig: LayoutConfig = {
+  cardWidth: 300,
+  cardHeight: 100,
+  roundSpacing: 400,
+  matchSpacing: 160,
+  startX: 40,
+  startY: 40,
+};
 
 /**
  * Calculates positions for all tournament cards in a tree structure
@@ -37,35 +46,83 @@ export const calculateTreePositions = (
 ): CardPosition[] => {
   const rounds = Object.keys(tournamentData);
   const positions: CardPosition[] = [];
+  const roundY: number[][] = [];
 
-  rounds.forEach((roundKey, roundIndex) => {
+  rounds.forEach((roundKey, r) => {
     const matches = tournamentData[roundKey];
-    const roundX = config.startX + (roundIndex * config.roundSpacing);
-    
-    // Calculate starting Y position with offset for each round
-    const baseY = config.startY + (roundIndex * 100);
-    
-    matches.forEach((match, matchIndex) => {
-      let cardY;
-      
-      if (roundIndex === 0) {
-        // First round: evenly spaced
-        cardY = baseY + (matchIndex * config.cardSpacing);
+    const x = config.startX + r * config.roundSpacing;
+    roundY[r] = [];
+
+    matches.forEach((match, i) => {
+      let y: number;
+
+      if (r === 0) {
+        y = config.startY + i * config.matchSpacing;
       } else {
-        // Subsequent rounds: position between previous round matches
-        const spacing = Math.pow(2, roundIndex) * config.cardSpacing;
-        cardY = baseY + (matchIndex * spacing) + (spacing / 2);
+        const y1 = roundY[r - 1][i * 2];
+        const y2 = roundY[r - 1][i * 2 + 1];
+        if (y1 === undefined || y2 === undefined) {
+          y = config.startY + i * config.matchSpacing * 2;
+        } else {
+          y = (y1 + y2) / 2;
+        }
       }
 
+      roundY[r][i] = y;
+
       positions.push({
-        x: roundX,
-        y: cardY,
+        x,
+        y,
+        roundIndex: r,
+        matchIndex: i,
         match,
-        roundIndex,
-        matchIndex
       });
     });
   });
 
   return positions;
+};
+
+/**
+ * Calculates connecting lines between tournament rounds
+ * @param positions - Array of card positions
+ * @param config - Layout configuration
+ * @returns Array of line point arrays
+ */
+export const calculateConnectingLines = (
+  positions: CardPosition[],
+  config: LayoutConfig
+): number[][] => {
+  const groups: { [roundIndex: number]: CardPosition[] } = {};
+  positions.forEach((p) => {
+    if (!groups[p.roundIndex]) groups[p.roundIndex] = [];
+    groups[p.roundIndex].push(p);
+  });
+
+  const totalRounds = Object.keys(groups).length;
+  const lines: number[][] = [];
+
+  for (let r = 0; r < totalRounds - 1; r++) {
+    const curr = groups[r];
+    const next = groups[r + 1];
+
+    next.forEach((n, i) => {
+      const c1 = curr[i * 2];
+      const c2 = curr[i * 2 + 1];
+      if (!c1 || !c2) return;
+
+      const x1 = c1.x + config.cardWidth;
+      const x2 = c2.x + config.cardWidth;
+      const xMid = x1 + (n.x - x1) / 2;
+
+      const y1 = c1.y + config.cardHeight / 2;
+      const y2 = c2.y + config.cardHeight / 2;
+      const yNext = n.y + config.cardHeight / 2;
+
+      lines.push([x1, y1, xMid, y1, xMid, yNext, n.x, yNext]);
+      lines.push([x2, y2, xMid, y2, xMid, yNext]);
+    });
+  }
+
+  return lines;
 };
