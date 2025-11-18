@@ -1,7 +1,11 @@
 {
-  "name": "elimination-tree",
+  "name": "tournamentree",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "An interactive tournament bracket visualization built with React, Konva, and TypeScript",
+  "keywords": ["tournament", "bracket", "visualization", "react", "konva", "typescript"],
+  "author": "Your Name",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",
