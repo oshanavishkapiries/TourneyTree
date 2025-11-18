@@ -1,5 +1,7 @@
 # @oshan/tourneytree
 
+![](./banner.gif)
+
 A React/Next.js component library for rendering interactive elimination tournament brackets with Konva.js canvas.
 
 ## Features
