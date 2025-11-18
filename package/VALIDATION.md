@@ -3,6 +3,7 @@
 ## Package Structure Verification
 
 ### ✅ Core Files Created:
+
 - [x] `package.json` - Correctly configured with dependencies bundled
 - [x] `tsconfig.json` - TypeScript configuration for React/JSX
 - [x] `rollup.config.js` - Build configuration for bundling
@@ -11,10 +12,11 @@
 - [x] `.gitignore` - Proper exclusions for Node.js projects
 
 ### ✅ Source Code Structure:
+
 ```
 src/
 ├── components/           # React Components
-│   ├── TourneyTree.tsx      # Main tournament tree component  
+│   ├── TourneyTree.tsx      # Main tournament tree component
 │   ├── TournamentCard.tsx   # Individual match card component
 │   └── ZoomControls.tsx     # Zoom control UI component
 ├── hooks/               # Custom React Hooks
@@ -30,30 +32,34 @@ src/
 ```
 
 ### ✅ TypeScript Validation:
+
 - [x] All imports/exports are correctly structured
-- [x] Type definitions are comprehensive and accurate  
+- [x] Type definitions are comprehensive and accurate
 - [x] React component props are properly typed
 - [x] Hook return types are defined
 - [x] No circular dependencies detected
 
 ### ✅ Package Configuration:
-- [x] **Package Name**: `@oshan/tourneytree` (scoped package)
+
+- [x] **Package Name**: `@osh2002/tourneytree` (scoped package)
 - [x] **Dependencies**: React, Konva, React-Konva bundled (not peer deps)
 - [x] **Build Outputs**: CommonJS + ES Module formats
 - [x] **TypeScript Declarations**: Generated automatically
 - [x] **Framework Support**: React and Next.js compatible
 
 ### ✅ API Design Features:
+
 - [x] **Simple Usage**: `<TourneyTree data={tournamentData} />`
 - [x] **Event Handlers**: `onCardClick`, `onCardHover` callbacks
 - [x] **Customization**: Layout config and color theme options
-- [x] **Zoom/Pan**: Configurable zoom and pan controls  
+- [x] **Zoom/Pan**: Configurable zoom and pan controls
 - [x] **Path Highlighting**: Tournament path highlighting on hover
 - [x] **Responsive**: Auto-sizing based on container dimensions
 
 ### ✅ Export Validation:
+
 - [x] Main component: `TourneyTree`
-- [x] Sub-components: `TournamentCard`, `ZoomControls` 
+- [x] Sub-components: `TournamentCard`, `ZoomControls`
 - [x] Custom hooks: `useStageZoom`, `useStageSize`, etc.
 - [x] Utilities: Layout calculation functions
 - [x] Types: All TypeScript interfaces exported
@@ -61,6 +67,7 @@ src/
 - [x] Default export: `TourneyTree`
 
 ### ✅ Documentation:
+
 - [x] Comprehensive README with examples
 - [x] API reference with all props documented
 - [x] TypeScript usage examples
@@ -70,12 +77,14 @@ src/
 ## Manual Build Test Results
 
 ### Code Quality Checks: ✅ PASSED
+
 - Syntax validation: No errors detected
 - Import/export consistency: All imports resolve correctly
 - TypeScript compatibility: Strict mode enabled, all types defined
 - React best practices: Functional components, proper hook usage
 
 ### Expected Build Output:
+
 ```
 dist/
 ├── index.js          # CommonJS build
@@ -87,6 +96,7 @@ dist/
 ## Next Steps for User:
 
 ### To Build and Test:
+
 ```bash
 cd package
 npm install
@@ -95,24 +105,26 @@ npm link  # For local testing
 ```
 
 ### To Publish:
+
 ```bash
 npm login
 npm publish
 ```
 
 ### Usage in Projects:
+
 ```bash
-npm install @oshan/tourneytree
+npm install @osh2002/tourneytree
 ```
 
 ```jsx
-import { TourneyTree } from '@oshan/tourneytree';
+import { TourneyTree } from "@osh2002/tourneytree";
 
-<TourneyTree 
+<TourneyTree
   data={tournamentData}
   onCardClick={(match, round, index) => console.log(match)}
   enableZoom={true}
-/>
+/>;
 ```
 
 ## Package Features Summary:

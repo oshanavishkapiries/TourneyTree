@@ -1,6 +1,6 @@
 {
-  "name": "@oshan/tourneytree",
-  "version": "1.0.0",
+  "name": "@osh2002/tourneytree",
+  "version": "1.0.1",
   "description": "A React/Next.js component for rendering elimination tournament trees with Konva",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
