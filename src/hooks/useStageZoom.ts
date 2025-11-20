@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export const useStageZoom = () => {
   const [stageScale, setStageScale] = useState(1);
@@ -47,6 +47,27 @@ export const useStageZoom = () => {
     setStagePosition({ x: 0, y: 0 });
   };
 
+  const fitToScreen = (
+    stageWidth: number,
+    stageHeight: number,
+    contentWidth: number,
+    contentHeight: number,
+    padding = 50
+  ) => {
+    if (contentWidth === 0 || contentHeight === 0) return;
+
+    const scaleX = (stageWidth - padding * 2) / contentWidth;
+    const scaleY = (stageHeight - padding * 2) / contentHeight;
+    const scale = Math.min(scaleX, scaleY);
+
+    // Center the content
+    const x = (stageWidth - contentWidth * scale) / 2;
+    const y = (stageHeight - contentHeight * scale) / 2;
+
+    setStageScale(scale);
+    setStagePosition({ x, y });
+  };
+
   return {
     stageScale,
     stagePosition,
@@ -55,5 +76,6 @@ export const useStageZoom = () => {
     zoomIn,
     zoomOut,
     resetZoom,
+    fitToScreen,
   };
 };

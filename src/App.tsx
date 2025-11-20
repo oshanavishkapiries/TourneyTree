@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Stage, Layer, Line } from "react-konva";
 import { useKonvaColors } from "./hooks/useKonvaColors";
 import { useStageSize } from "./hooks/useStageSize";
@@ -29,6 +29,7 @@ const App = () => {
     zoomIn,
     zoomOut,
     resetZoom,
+    fitToScreen,
   } = useStageZoom();
   const { handleDragStart, handleDragEnd, handleTouchMove } =
     useStageControls(setStagePosition);
@@ -41,6 +42,32 @@ const App = () => {
     defaultLayoutConfig
   );
   const lines = calculateConnectingLines(tree, defaultLayoutConfig);
+
+  // Auto-fit on mount
+  useEffect(() => {
+    if (tree.length > 0 && stageSize.width > 0 && stageSize.height > 0) {
+      // Calculate tree dimensions
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+
+      tree.forEach(node => {
+        minX = Math.min(minX, node.x);
+        maxX = Math.max(maxX, node.x + defaultLayoutConfig.cardWidth);
+        minY = Math.min(minY, node.y);
+        maxY = Math.max(maxY, node.y + defaultLayoutConfig.cardHeight);
+      });
+
+      const treeWidth = maxX - minX;
+      const treeHeight = maxY - minY;
+
+      fitToScreen(
+        stageSize.width,
+        stageSize.height,
+        treeWidth,
+        treeHeight,
+        50 // padding
+      );
+    }
+  }, [stageSize.width, stageSize.height, tree.length]); // Dependencies for auto-fit
 
   // Path highlighting handlers
   const handleCardMouseEnter = (cardIndex: number) => {
