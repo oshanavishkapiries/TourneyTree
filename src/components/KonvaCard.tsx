@@ -11,6 +11,7 @@ interface KonvaCardProps {
   seed: string;
   player1: string;
   player2: string;
+  matchNumber: number;
   cardIndex?: number;
   isHighlighted?: boolean;
   onMouseEnter?: (cardIndex: number) => void;
@@ -29,6 +30,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   seed,
   player1,
   player2,
+  matchNumber,
   cardIndex = 0,
   isHighlighted = false,
   onMouseEnter,
@@ -138,6 +140,18 @@ export const KonvaCard: FC<KonvaCardProps> = ({
         fill={colors.mutedForeground}
         width={cardWidth}
         align="left"
+      />
+
+      {/* Match Number */}
+      <Text
+        x={cardWidth - 60}
+        y={seedTextY}
+        text={`#${matchNumber}`}
+        fontSize={seedFontSize}
+        fontFamily="Arial, sans-serif"
+        fill={colors.mutedForeground}
+        width={50}
+        align="right"
       />
 
       {/* Separator Line */}

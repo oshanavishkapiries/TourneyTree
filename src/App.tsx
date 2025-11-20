@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useEffect } from "react";
-import { Stage, Layer, Line } from "react-konva";
+import { Stage, Layer, Line, Text } from "react-konva";
 import { useKonvaColors } from "./hooks/useKonvaColors";
 import { useStageSize } from "./hooks/useStageSize";
 import { useStageZoom } from "./hooks/useStageZoom";
@@ -115,6 +115,22 @@ const App = () => {
             <Line key={i} points={pts} stroke={colors.border} strokeWidth={3} />
           ))}
 
+          {/* Round Headers */}
+          {Object.keys(sampleTournamentData).map((roundKey, i) => (
+            <Text
+              key={roundKey}
+              x={defaultLayoutConfig.startX + i * defaultLayoutConfig.roundSpacing}
+              y={defaultLayoutConfig.startY - 50}
+              text={roundKey}
+              fontSize={20}
+              fontFamily="Arial, sans-serif"
+              fontStyle="bold"
+              fill={colors.foreground}
+              width={defaultLayoutConfig.cardWidth}
+              align="center"
+            />
+          ))}
+
           {tree.map((p, i) => (
             <KonvaCard
               key={i}
@@ -122,6 +138,7 @@ const App = () => {
               y={p.y}
               colors={colors}
               {...p.match}
+              matchNumber={i + 1}
               cardIndex={i}
               isHighlighted={highlightedPath?.cardIndices.includes(i) || false}
               onMouseEnter={handleCardMouseEnter}
