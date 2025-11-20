@@ -43,6 +43,9 @@ const App = () => {
   );
   const lines = calculateConnectingLines(tree, defaultLayoutConfig);
 
+  // Determine the final round index (last round)
+  const finalRoundIndex = Math.max(...tree.map(p => p.roundIndex));
+
   // Auto-fit on mount
   useEffect(() => {
     if (tree.length > 0 && stageSize.width > 0 && stageSize.height > 0) {
@@ -140,6 +143,7 @@ const App = () => {
               {...p.match}
               matchNumber={i + 1}
               cardIndex={i}
+              isFinal={p.roundIndex === finalRoundIndex}
               isHighlighted={highlightedPath?.cardIndices.includes(i) || false}
               onMouseEnter={handleCardMouseEnter}
               onMouseLeave={handleCardMouseLeave}

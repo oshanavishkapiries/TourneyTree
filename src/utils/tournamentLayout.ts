@@ -4,6 +4,7 @@ export interface Match {
   player2?: string;
   winner?: string;
   isBye?: boolean;
+  status?: "not-started" | "ongoing" | "finished";
 }
 
 export interface TournamentData {
@@ -111,18 +112,28 @@ export const calculateConnectingLines = (
     next.forEach((n, i) => {
       const c1 = curr[i * 2];
       const c2 = curr[i * 2 + 1];
-      if (!c1 || !c2) return;
 
-      const x1 = c1.x + config.cardWidth;
-      const x2 = c2.x + config.cardWidth;
-      const xMid = x1 + (n.x - x1) / 2;
+      // If both parent matches exist, draw the standard bracket lines
+      if (c1 && c2) {
+        const x1 = c1.x + config.cardWidth;
+        const x2 = c2.x + config.cardWidth;
+        const xMid = x1 + (n.x - x1) / 2;
 
-      const y1 = c1.y + config.cardHeight / 2;
-      const y2 = c2.y + config.cardHeight / 2;
-      const yNext = n.y + config.cardHeight / 2;
+        const y1 = c1.y + config.cardHeight / 2;
+        const y2 = c2.y + config.cardHeight / 2;
+        const yNext = n.y + config.cardHeight / 2;
 
-      lines.push([x1, y1, xMid, y1, xMid, yNext, n.x, yNext]);
-      lines.push([x2, y2, xMid, y2, xMid, yNext]);
+        lines.push([x1, y1, xMid, y1, xMid, yNext, n.x, yNext]);
+        lines.push([x2, y2, xMid, y2, xMid, yNext, n.x, yNext]);
+      }
+      // If only one parent exists (BYE case), draw a direct line
+      else if (c1) {
+        const x1 = c1.x + config.cardWidth;
+        const y1 = c1.y + config.cardHeight / 2;
+        const yNext = n.y + config.cardHeight / 2;
+
+        lines.push([x1, y1, n.x, yNext]);
+      }
     });
   }
 

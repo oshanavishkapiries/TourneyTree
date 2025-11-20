@@ -13,6 +13,8 @@ interface KonvaCardProps {
   player2?: string;
   winner?: string;
   isBye?: boolean;
+  isFinal?: boolean;
+  status?: "not-started" | "ongoing" | "finished";
   matchNumber: number;
   cardIndex?: number;
   isHighlighted?: boolean;
@@ -34,6 +36,8 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   player2,
   winner,
   isBye,
+  isFinal = false,
+  status = "not-started",
   matchNumber,
   cardIndex = 0,
   isHighlighted = false,
@@ -70,13 +74,49 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   const buttonY = playerText1Y;
   const buttonCornerRadius = buttonHeight / 5;
 
-  // Dynamic properties based on hover state
+  // Dynamic properties based on status and hover state
+  const getStatusBorderColor = () => {
+    if (isHighlighted || isCardHovered) return colors.primary;
+
+    switch (status) {
+      case "not-started":
+        return "#6b7280"; // Gray
+      case "ongoing":
+        return "#3b82f6"; // Blue
+      case "finished":
+      default:
+        return colors.border;
+    }
+  };
+
+  const getStatusBackgroundColor = () => {
+    switch (status) {
+      case "not-started":
+        return "#f9fafb"; // Light gray
+      case "ongoing":
+        return "#eff6ff"; // Light blue
+      case "finished":
+      default:
+        return colors.card;
+    }
+  };
+
+  const getPlayerBackgroundColor = (playerName: string) => {
+    if (status === "not-started") return "transparent";
+
+    if (winner === playerName) {
+      if (isFinal) {
+        return "#fef08a"; // Light yellow for champion
+      }
+      return "#bbf7d0"; // Light green for winner
+    }
+
+    return "transparent";
+  };
+
   const cardStrokeWidth = isCardHovered || isHighlighted ? 3 : 3;
-  const cardStroke = isHighlighted
-    ? colors.primary
-    : isCardHovered
-      ? colors.primary
-      : colors.border;
+  const cardStroke = getStatusBorderColor();
+  const cardBackground = getStatusBackgroundColor();
   const cardShadowBlur = isHighlighted ? 0 : 0;
   const buttonOpacity = isButtonHovered ? 0.9 : 1;
 
@@ -117,7 +157,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   return (
     <Group
       x={x}
-      y={y}
+      y={isBye ? y + 15 : y}
       onMouseEnter={handleCardMouseEnter}
       onMouseLeave={handleCardMouseLeave}
     // draggable
@@ -126,7 +166,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
       <Rect
         width={cardWidth}
         height={cardHeight}
-        fill={colors.card}
+        fill={cardBackground}
         stroke={cardStroke}
         strokeWidth={cardStrokeWidth}
         cornerRadius={cornerRadius}
@@ -161,6 +201,58 @@ export const KonvaCard: FC<KonvaCardProps> = ({
       {/* Separator Line */}
       <Line points={separatorPoints} stroke={colors.border} strokeWidth={1} />
 
+      {/* Status Badge */}
+      {status && (
+        <>
+          <Rect
+            x={cardWidth / 2 - 45}
+            y={seedTextY - 2}
+            width={90}
+            height={18}
+            fill={
+              status === "not-started"
+                ? "#e5e7eb"
+                : status === "ongoing"
+                  ? "#dbeafe"
+                  : "#d1fae5"
+            }
+            cornerRadius={4}
+          />
+          <Text
+            x={cardWidth / 2 - 45}
+            y={seedTextY}
+            text={
+              status === "not-started"
+                ? "NOT STARTED"
+                : status === "ongoing"
+                  ? "ONGOING"
+                  : "FINISHED"
+            }
+            fontSize={10}
+            fontFamily="Arial, sans-serif"
+            fontStyle="bold"
+            fill={
+              status === "not-started"
+                ? "#6b7280"
+                : status === "ongoing"
+                  ? "#2563eb"
+                  : "#059669"
+            }
+            width={90}
+            align="center"
+          />
+        </>
+      )}
+
+      {/* Player 1 Background */}
+      <Rect
+        x={1}
+        y={headerHeight + 1}
+        width={cardWidth - 2}
+        height={29}
+        fill={getPlayerBackgroundColor(player1)}
+      />
+
       {/* Player 1 Name */}
       <Text
         x={textPaddingX}
@@ -177,15 +269,32 @@ export const KonvaCard: FC<KonvaCardProps> = ({
         <Text
           x={textPaddingX + 150}
           y={playerText1Y}
-          text="WIN"
+          text={isFinal ? "CAMP" : "WIN"}
           fontSize={14}
           fontFamily="Arial, sans-serif"
+        />
+      )}
+      {/* Player Separator Line */}
+      {!isBye && player2 && (
+        <Line
+          points={[textPaddingX, playerText1Y + 20, cardWidth - textPaddingX - 80, playerText1Y + 20]}
+          stroke={colors.border}
+          strokeWidth={1}
         />
       )}
 
       {/* Player 2 Name */}
       {!isBye && player2 && (
         <>
+          {/* Player 2 Background */}
+          <Rect
+            x={1}
+            y={headerHeight + 30}
+            width={cardWidth - 2}
+            height={29}
+            fill={getPlayerBackgroundColor(player2)}
+          />
+
           <Text
             x={textPaddingX}
             y={playerText2Y}
@@ -200,7 +309,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
             <Text
               x={textPaddingX + 150}
               y={playerText2Y}
-              text="WIN"
+              text={isFinal ? "CAMP" : "WIN"}
               fontSize={14}
               fontFamily="Arial, sans-serif"
             />
