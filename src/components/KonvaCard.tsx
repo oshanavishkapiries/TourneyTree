@@ -52,13 +52,13 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   // Card dimensions and layout
   const cardWidth = 300;
   const cardHeight = isBye ? 70 : 100; // Reduced height for Bye cards
-  const cornerRadius = 12;
+  const cornerRadius = 5;
   const padding = 10;
   const textPaddingX = 12;
 
   // Derived layout properties
   const headerHeight = 30;
-  const separatorPoints = [0, headerHeight, cardWidth, headerHeight];
+  const separatorPoints = [1.5, headerHeight, cardWidth - 1.5, headerHeight];
 
   const seedTextY = padding;
   const seedFontSize = 12;
@@ -72,7 +72,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   const buttonWidth = (cardWidth - padding * 2) / 4;
   const buttonX = cardWidth - buttonWidth - padding;
   const buttonY = playerText1Y;
-  const buttonCornerRadius = buttonHeight / 5;
+  const buttonCornerRadius = 5;
 
   // Dynamic properties based on status and hover state
   const getStatusBorderColor = () => {
@@ -119,6 +119,14 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   const cardBackground = getStatusBackgroundColor();
   const cardShadowBlur = isHighlighted ? 0 : 0;
   const buttonOpacity = isButtonHovered ? 0.9 : 1;
+
+  // Calculate background width based on button presence
+  const playerBackgroundWidth = isBye ? cardWidth - 3 : buttonX - 12;
+
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
+  };
 
   const handleCardMouseEnter = () => {
     setIsCardHovered(true);
@@ -246,9 +254,9 @@ export const KonvaCard: FC<KonvaCardProps> = ({
 
       {/* Player 1 Background */}
       <Rect
-        x={1}
+        x={1.5}
         y={headerHeight + 1}
-        width={cardWidth - 2}
+        width={playerBackgroundWidth}
         height={29}
         fill={getPlayerBackgroundColor(player1)}
       />
@@ -257,7 +265,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
       <Text
         x={textPaddingX}
         y={playerText1Y}
-        text={player1}
+        text={truncateText(player1, 15)}
         fontSize={playerFontSize}
         fontFamily="Arial, sans-serif"
         fontStyle=""
@@ -288,9 +296,9 @@ export const KonvaCard: FC<KonvaCardProps> = ({
         <>
           {/* Player 2 Background */}
           <Rect
-            x={1}
+            x={1.5}
             y={headerHeight + 30}
-            width={cardWidth - 2}
+            width={playerBackgroundWidth}
             height={29}
             fill={getPlayerBackgroundColor(player2)}
           />
@@ -298,7 +306,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
           <Text
             x={textPaddingX}
             y={playerText2Y}
-            text={player2}
+            text={truncateText(player2, 15)}
             fontSize={playerFontSize}
             fontFamily="Arial, sans-serif"
             fill={colors.cardForeground}
