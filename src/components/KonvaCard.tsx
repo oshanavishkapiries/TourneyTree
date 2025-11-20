@@ -15,6 +15,11 @@ interface KonvaCardProps {
   isHighlighted?: boolean;
   onMouseEnter?: (cardIndex: number) => void;
   onMouseLeave?: () => void;
+  onViewClick?: (matchData: {
+    seed: string;
+    player1: string;
+    player2: string;
+  }) => void;
 }
 
 export const KonvaCard: FC<KonvaCardProps> = ({
@@ -28,6 +33,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   isHighlighted = false,
   onMouseEnter,
   onMouseLeave,
+  onViewClick,
 }) => {
   // State for hover effects
   const [isCardHovered, setIsCardHovered] = useState(false);
@@ -63,8 +69,8 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   const cardStroke = isHighlighted
     ? colors.primary
     : isCardHovered
-    ? colors.primary
-    : colors.border;
+      ? colors.primary
+      : colors.border;
   const cardShadowBlur = isHighlighted ? 0 : 0;
   const buttonOpacity = isButtonHovered ? 0.9 : 1;
 
@@ -108,7 +114,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
       y={y}
       onMouseEnter={handleCardMouseEnter}
       onMouseLeave={handleCardMouseLeave}
-      // draggable
+    // draggable
     >
       {/* Card Background */}
       <Rect
@@ -168,6 +174,20 @@ export const KonvaCard: FC<KonvaCardProps> = ({
         y={buttonY}
         onMouseEnter={handleButtonMouseEnter}
         onMouseLeave={handleButtonMouseLeave}
+        onClick={() =>
+          onViewClick?.({
+            seed,
+            player1,
+            player2,
+          })
+        }
+        onTap={() =>
+          onViewClick?.({
+            seed,
+            player1,
+            player2,
+          })
+        }
         opacity={buttonOpacity}
       >
         <Rect

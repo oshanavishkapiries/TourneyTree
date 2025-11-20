@@ -51,6 +51,14 @@ const App = () => {
     clearHighlight();
   };
 
+  const handleViewClick = (matchData: {
+    seed: string;
+    player1: string;
+    player2: string;
+  }) => {
+    console.log("Tournament Match Data:", matchData);
+  };
+
   return (
     <div
       ref={containerRef}
@@ -91,6 +99,7 @@ const App = () => {
               isHighlighted={highlightedPath?.cardIndices.includes(i) || false}
               onMouseEnter={handleCardMouseEnter}
               onMouseLeave={handleCardMouseLeave}
+              onViewClick={handleViewClick}
             />
           ))}
         </Layer>
