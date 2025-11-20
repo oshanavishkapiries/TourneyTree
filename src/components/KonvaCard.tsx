@@ -11,6 +11,7 @@ interface KonvaCardProps {
   seed: string;
   player1: string;
   player2: string;
+  winner?: string;
   matchNumber: number;
   cardIndex?: number;
   isHighlighted?: boolean;
@@ -30,6 +31,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   seed,
   player1,
   player2,
+  winner,
   matchNumber,
   cardIndex = 0,
   isHighlighted = false,
@@ -169,6 +171,15 @@ export const KonvaCard: FC<KonvaCardProps> = ({
         width={cardWidth}
         align="left"
       />
+      {winner === player1 && (
+        <Text
+          x={textPaddingX + 150}
+          y={playerText1Y}
+          text="👑"
+          fontSize={14}
+          fontFamily="Arial, sans-serif"
+        />
+      )}
 
       {/* Player 2 Name */}
       <Text
@@ -181,6 +192,15 @@ export const KonvaCard: FC<KonvaCardProps> = ({
         width={cardWidth}
         align="left"
       />
+      {winner === player2 && (
+        <Text
+          x={textPaddingX + 150}
+          y={playerText2Y}
+          text="👑"
+          fontSize={14}
+          fontFamily="Arial, sans-serif"
+        />
+      )}
 
       {/* View ScoreBoard Button */}
       <Group

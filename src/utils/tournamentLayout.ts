@@ -2,6 +2,7 @@ export interface Match {
   seed: string;
   player1: string;
   player2: string;
+  winner?: string;
 }
 
 export interface TournamentData {
