@@ -10,8 +10,9 @@ interface KonvaCardProps {
   colors: KonvaColors;
   seed: string;
   player1: string;
-  player2: string;
+  player2?: string;
   winner?: string;
+  isBye?: boolean;
   matchNumber: number;
   cardIndex?: number;
   isHighlighted?: boolean;
@@ -32,6 +33,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
   player1,
   player2,
   winner,
+  isBye,
   matchNumber,
   cardIndex = 0,
   isHighlighted = false,
@@ -45,7 +47,7 @@ export const KonvaCard: FC<KonvaCardProps> = ({
 
   // Card dimensions and layout
   const cardWidth = 300;
-  const cardHeight = 100;
+  const cardHeight = isBye ? 70 : 100; // Reduced height for Bye cards
   const cornerRadius = 12;
   const padding = 10;
   const textPaddingX = 12;
@@ -171,87 +173,87 @@ export const KonvaCard: FC<KonvaCardProps> = ({
         width={cardWidth}
         align="left"
       />
-      {winner === player1 && (
+      {winner === player1 && !isBye && (
         <Text
           x={textPaddingX + 150}
           y={playerText1Y}
-          text="👑"
+          text="WIN"
           fontSize={14}
           fontFamily="Arial, sans-serif"
         />
       )}
 
       {/* Player 2 Name */}
-      <Text
-        x={textPaddingX}
-        y={playerText2Y}
-        text={player2}
-        fontSize={playerFontSize}
-        fontFamily="Arial, sans-serif"
-        fill={colors.cardForeground}
-        width={cardWidth}
-        align="left"
-      />
-      {winner === player2 && (
-        <Text
-          x={textPaddingX + 150}
-          y={playerText2Y}
-          text="👑"
-          fontSize={14}
-          fontFamily="Arial, sans-serif"
-        />
-      )}
+      {!isBye && player2 && (
+        <>
+          <Text
+            x={textPaddingX}
+            y={playerText2Y}
+            text={player2}
+            fontSize={playerFontSize}
+            fontFamily="Arial, sans-serif"
+            fill={colors.cardForeground}
+            width={cardWidth}
+            align="left"
+          />
+          {winner === player2 && (
+            <Text
+              x={textPaddingX + 150}
+              y={playerText2Y}
+              text="WIN"
+              fontSize={14}
+              fontFamily="Arial, sans-serif"
+            />
+          )}
+        </>
+      )
+      }
 
-      {/* View ScoreBoard Button */}
-      <Group
-        x={buttonX}
-        y={buttonY}
-        onMouseEnter={handleButtonMouseEnter}
-        onMouseLeave={handleButtonMouseLeave}
-        onClick={() =>
-          onViewClick?.({
-            seed,
-            player1,
-            player2,
-          })
-        }
-        onTap={() =>
-          onViewClick?.({
-            seed,
-            player1,
-            player2,
-          })
-        }
-        opacity={buttonOpacity}
-      >
-        <Rect
-          width={buttonWidth}
-          height={buttonHeight}
-          fill={colors.primary}
-          cornerRadius={buttonCornerRadius}
-        />
-        <Text
-          text="View"
-          fontSize={12}
-          fontFamily="Arial, sans-serif"
-          fill={colors.primaryForeground}
-          width={buttonWidth}
-          height={buttonHeight}
-          align="center"
-          verticalAlign="middle"
-        />
-      </Group>
-      {/* <Text
-        x={0}
-        y={0}
-        text={`P - x:${x} y:${y}`}
-        fontSize={20}
-        fontFamily="Arial, sans-serif"
-        fontStyle="bold"
-        fill="blue"
-        width={cardWidth}
-        align="left"
-      /> */}
-    </Group>
+      {/* View ScoreBoard Button - Hide for Bye matches */}
+      {
+        !isBye && (
+          <Group
+            x={buttonX}
+            y={buttonY}
+            onMouseEnter={handleButtonMouseEnter}
+            onMouseLeave={handleButtonMouseLeave}
+            onClick={(e: any) => {
+              e.cancelBubble = true;
+              onViewClick?.({
+                seed,
+                player1,
+                player2: player2 || "",
+              });
+            }}
+            onTap={(e: any) => {
+              e.cancelBubble = true;
+              onViewClick?.({
+                seed,
+                player1,
+                player2: player2 || "",
+              });
+            }}
+            opacity={buttonOpacity}
+          >
+            <Rect
+              width={buttonWidth}
+              height={buttonHeight}
+              fill={colors.primary}
+              cornerRadius={buttonCornerRadius}
+            />
+            <Text
+              text="View"
+              fontSize={12}
+              fontFamily="Arial, sans-serif"
+              fill={colors.primaryForeground}
+              width={buttonWidth}
+              height={buttonHeight}
+              align="center"
+              verticalAlign="middle"
+            />
+          </Group>
+        )
+      }
+    </Group >
   );
 };
