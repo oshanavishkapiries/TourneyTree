@@ -114,9 +114,33 @@ const App = () => {
         draggable
       >
         <Layer>
-          {lines.map((pts, i) => (
-            <Line key={i} points={pts} stroke={colors.border} strokeWidth={3} />
-          ))}
+          {[...lines]
+            .sort((a, b) => {
+              const aHighlighted =
+                highlightedPath?.cardIndices?.includes(a.sourceIndex) &&
+                highlightedPath?.cardIndices?.includes(a.targetIndex);
+              const bHighlighted =
+                highlightedPath?.cardIndices?.includes(b.sourceIndex) &&
+                highlightedPath?.cardIndices?.includes(b.targetIndex);
+
+              if (aHighlighted && !bHighlighted) return 1;
+              if (!aHighlighted && bHighlighted) return -1;
+              return 0;
+            })
+            .map((line, i) => {
+              const isHighlighted =
+                highlightedPath?.cardIndices?.includes(line.sourceIndex) &&
+                highlightedPath?.cardIndices?.includes(line.targetIndex);
+
+              return (
+                <Line
+                  key={i}
+                  points={line.points}
+                  stroke={isHighlighted ? colors.primary : colors.border}
+                  strokeWidth={isHighlighted ? 4 : 3}
+                />
+              );
+            })}
 
           {/* Round Headers */}
           {Object.keys(sampleTournamentData).map((roundKey, i) => (

@@ -28,6 +28,12 @@ export interface LayoutConfig {
   startY: number;
 }
 
+export interface ConnectionLine {
+  points: number[];
+  sourceIndex: number;
+  targetIndex: number;
+}
+
 export const defaultLayoutConfig: LayoutConfig = {
   cardWidth: 300,
   cardHeight: 100,
@@ -95,7 +101,7 @@ export const calculateTreePositions = (
 export const calculateConnectingLines = (
   positions: CardPosition[],
   config: LayoutConfig
-): number[][] => {
+): ConnectionLine[] => {
   const groups: { [roundIndex: number]: CardPosition[] } = {};
   positions.forEach((p) => {
     if (!groups[p.roundIndex]) groups[p.roundIndex] = [];
@@ -103,7 +109,7 @@ export const calculateConnectingLines = (
   });
 
   const totalRounds = Object.keys(groups).length;
-  const lines: number[][] = [];
+  const lines: ConnectionLine[] = [];
 
   for (let r = 0; r < totalRounds - 1; r++) {
     const curr = groups[r];
@@ -112,6 +118,7 @@ export const calculateConnectingLines = (
     next.forEach((n, i) => {
       const c1 = curr[i * 2];
       const c2 = curr[i * 2 + 1];
+      const targetIndex = positions.indexOf(n);
 
       // If both parent matches exist, draw the standard bracket lines
       if (c1 && c2) {
@@ -123,16 +130,29 @@ export const calculateConnectingLines = (
         const y2 = c2.y + config.cardHeight / 2;
         const yNext = n.y + config.cardHeight / 2;
 
-        lines.push([x1, y1, xMid, y1, xMid, yNext, n.x, yNext]);
-        lines.push([x2, y2, xMid, y2, xMid, yNext, n.x, yNext]);
+        lines.push({
+          points: [x1, y1, xMid, y1, xMid, yNext, n.x, yNext],
+          sourceIndex: positions.indexOf(c1),
+          targetIndex,
+        });
+        lines.push({
+          points: [x2, y2, xMid, y2, xMid, yNext, n.x, yNext],
+          sourceIndex: positions.indexOf(c2),
+          targetIndex,
+        });
       }
       // If only one parent exists (BYE case), draw a direct line
       else if (c1) {
         const x1 = c1.x + config.cardWidth;
+        const xMid = x1 + (n.x - x1) / 2;
         const y1 = c1.y + config.cardHeight / 2;
         const yNext = n.y + config.cardHeight / 2;
 
-        lines.push([x1, y1, n.x, yNext]);
+        lines.push({
+          points: [x1, y1, xMid, y1, xMid, yNext, n.x, yNext],
+          sourceIndex: positions.indexOf(c1),
+          targetIndex,
+        });
       }
     });
   }
